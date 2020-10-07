@@ -20,13 +20,14 @@ Q_OBJECT
 public:
 	explicit CGOLWindow(QWidget *parent = nullptr);
 	~CGOLWindow() override;
+	[[nodiscard]] int getSpeed() const;
 
 private slots:
-	static void on_speedSlider_valueChanged(int position);
+	void on_speedSlider_valueChanged(int position);
 
 private:
 	Ui::CGOLWindow *ui;
 	std::unique_ptr<CGOL> cgol;
-
+	int position_;
 };
 #endif // CGOL_H

@@ -2,26 +2,33 @@ cmake_minimum_required(VERSION 3.5)
 
 project(cgol LANGUAGES CXX)
 
+enable_testing(true)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    add_compile_options(-Wall -Wextra -Wpedantic)
+endif ()
 
-include_directories(${CMAKE_BINARY_DIR})
+find_package(Qt5 COMPONENTS Widgets Test REQUIRED)
 
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
+include_directories(${Qt5Widgets_INCLUDE_DIRS})
 
 add_executable(cgol
         main.cpp
         cgol_window.cpp
-        cgol_window.hpp
-        cgol.ui
-        cgol_game.cpp
-        cgol_game.hpp
-        )
-
+        cgol_game.cpp)
 target_link_libraries(cgol PRIVATE Qt5::Widgets)
+
+add_executable(test_gui
+        test_gui.cpp
+        cgol_window.cpp)
+add_test(test_gui test_gui)
+target_link_libraries(test_gui PRIVATE Qt5::Widgets Qt5::Test)
