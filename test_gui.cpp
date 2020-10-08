@@ -1,7 +1,6 @@
 #include "test_gui.hpp"
 #include <QSignalSpy>
 #include <QSlider>
-#include <QObject>
 
 void TestGUI::testSlider()
 {
@@ -13,6 +12,7 @@ void TestGUI::testSlider()
 
 	slider->setValue(55);
 
+	// TODO: fix
 	QCOMPARE(w.getSpeed(), 55);
 	QCOMPARE(spy.count(), 1);
 }

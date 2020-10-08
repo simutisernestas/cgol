@@ -1,38 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-    <class>CGOLWindow</class>
-    <widget class="QWidget" name="CGOLWindow">
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>560</width>
-                <height>329</height>
-            </rect>
-        </property>
-        <property name="windowTitle">
-            <string>CGOLWindow</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout">
-            <item>
-                <widget class="QFrame" name="gameField">
-                    <property name="frameShape">
-                        <enum>QFrame::StyledPanel</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>QFrame::Raised</enum>
-                    </property>
-                </widget>
-            </item>
-            <item>
-                <widget class="QSlider" name="speedSlider">
-                    <property name="orientation">
-                        <enum>Qt::Horizontal</enum>
-                    </property>
-                </widget>
-            </item>
-        </layout>
+ <class>CGOLWindow</class>
+ <widget class="QWidget" name="CGOLWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>708</width>
+    <height>434</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>CGOL</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QSlider" name="speedSlider">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
     </widget>
-    <resources/>
-    <connections/>
+   </item>
+   <item>
+    <widget class="QPushButton" name="startButton">
+     <property name="text">
+      <string>PushButton</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
 </ui>

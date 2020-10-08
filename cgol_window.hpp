@@ -2,8 +2,9 @@
 #define CGOL_WINDOW_HPP
 
 #include <QWidget>
-#include "cgol_game.hpp"
+#include "cgol_board.hpp"
 #include <memory>
+#include <QtWidgets/QPushButton>
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -20,14 +21,9 @@ Q_OBJECT
 public:
 	explicit CGOLWindow(QWidget *parent = nullptr);
 	~CGOLWindow() override;
-	[[nodiscard]] int getSpeed() const;
-
-private slots:
-	void on_speedSlider_valueChanged(int position);
 
 private:
 	Ui::CGOLWindow *ui;
-	std::unique_ptr<CGOL> cgol;
-	int position_;
+	CGOLBoard *cgol_board_;
 };
 #endif // CGOL_H
