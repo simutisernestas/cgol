@@ -5,25 +5,35 @@
 #include <QtGui/QPaintEvent>
 
 CGOLBoard::CGOLBoard(QWidget *parent)
-	: QFrame(parent),
-	  board{},
+	: QFrame{parent},
+	  board_{},
 	  rng_{std::random_device()()},
 	  random_dist_{1, 10},
-	  speed_{0}
+	  speed_{0},
+	  game_logic_{}
 {
 }
 
-void CGOLBoard::clearBoard()
+void CGOLBoard::initEmpty()
 {
-	for (bool &i : board)
+	for (bool &i : board_)
 		i = false;
 }
 
-void CGOLBoard::initBoard()
+void CGOLBoard::initRandom()
 {
-	for (bool &i : board) {
+	for (bool &i : board_) {
 		auto rand_num = random_dist_(rng_);
 		i = (rand_num <= 5);
+	}
+}
+
+void CGOLBoard::initChess()
+{
+	for (int i = 0; i < size_; ++i) {
+		for (int j = 0; j < size_; ++j) {
+			board_[i * size_ + j] = !((i + j) & 1);
+		}
 	}
 }
 
@@ -57,7 +67,8 @@ void CGOLBoard::paintEvent(QPaintEvent *event)
 
 	for (int i = 0; i < size_; ++i) {
 		for (int j = 0; j < size_; ++j) {
-			QRgb rgb = board[i * j] ? black : white;
+
+			QRgb rgb = board_[i * size_ + j] ? black : white;
 
 			drawSquare(
 				painter,
@@ -76,16 +87,14 @@ void CGOLBoard::timerEvent(QTimerEvent *event)
 		return;
 	}
 
-	// TODO: step?
+	game_logic_.runGeneration(board_, size_);
 	update();
 	timer_.start(timeoutTime(), this);
-
 }
 
 void CGOLBoard::start()
 {
-	clearBoard();
-	initBoard();
+	initRandom();
 	timer_.start(timeoutTime(), this);
 }
 
