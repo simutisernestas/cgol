@@ -1,0 +1,12 @@
+TODO:
+ - try TDD :)
+ - Game field size slider
+ - Zoom functionality
+ - squareHeight squareWidth to one function or separate width,height?
+ - Variable game field size
+ - Optimize game logic
+
+DONE:
+ - Game field drawing at variable speed
+ - Fixed field size first
+ - Game logic
