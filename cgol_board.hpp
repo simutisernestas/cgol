@@ -20,9 +20,10 @@ public slots:
 protected:
 	void paintEvent(QPaintEvent *event) override;
 	void timerEvent(QTimerEvent *event) override;
+	void wheelEvent(QWheelEvent *event) override;
 
 private:
-	static constexpr int size_ = 50; // square
+	static constexpr int size_ = 10; // square
 	static constexpr int area_ = size_ * size_;
 	QBasicTimer timer_;
 	bool board_[area_];
@@ -30,17 +31,17 @@ private:
 	std::uniform_int_distribution<std::mt19937::result_type> random_dist_;
 	int speed_;
 	CGOLLogic game_logic_;
+	float scale_;
 
-	int squareWidth()
-	{ return width() / size_; }
-	int squareHeight()
-	{ return height() / size_; }
+	double squareWidth()
+	{ return width() / (double)size_; }
+	double squareHeight()
+	{ return height() / (double)size_; }
 	void initEmpty();
 	void initRandom();
 	void initChess();
-	void drawSquare(QPainter &painter, int x, int y, QRgb color);
 	[[nodiscard]] int timeoutTime() const
-	{ return 1000 / (speed_ + 1); }
+	{ return 500 / (speed_ + 1); }
 };
 
 #endif //CGOL_BOARD_HPP

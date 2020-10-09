@@ -10,8 +10,20 @@ CGOLBoard::CGOLBoard(QWidget *parent)
 	  rng_{std::random_device()()},
 	  random_dist_{1, 10},
 	  speed_{0},
-	  game_logic_{}
+	  game_logic_{},
+	  scale_{1.0}
 {
+}
+
+void CGOLBoard::start()
+{
+	initRandom();
+	timer_.start(timeoutTime(), this);
+}
+
+void CGOLBoard::setSpeed(int speed)
+{
+	speed_ = speed;
 }
 
 void CGOLBoard::initEmpty()
@@ -37,45 +49,22 @@ void CGOLBoard::initChess()
 	}
 }
 
-void CGOLBoard::drawSquare(QPainter &painter, int x, int y, QRgb rgb)
-{
-	auto color = QColor(rgb);
-	painter.fillRect(x + 1, y + 1, squareWidth() - 2, squareHeight() - 2, color);
-
-	painter.setPen(color.lighter());
-	painter.drawLine(x, y + squareHeight() - 1, x, y);
-	painter.drawLine(x, y, x + squareWidth() - 1, y);
-
-	painter.setPen(color.darker());
-	painter.drawLine(x + 1, y + squareHeight() - 1,
-					 x + squareWidth() - 1, y + squareHeight() - 1);
-	painter.drawLine(x + squareWidth() - 1, y + squareHeight() - 1,
-					 x + squareWidth() - 1, y + 1);
-}
-
 void CGOLBoard::paintEvent(QPaintEvent *event)
 {
 	static constexpr QRgb black = 0x000000;
 	static constexpr QRgb white = 0xffffff;
-
+	static constexpr int margin = 1;
 	QFrame::paintEvent(event);
 
 	QPainter painter(this);
-	QRect rect = contentsRect();
-
-	int boardTop = rect.bottom() - size_ * squareHeight();
+	painter.scale(scale_, scale_);
 
 	for (int i = 0; i < size_; ++i) {
 		for (int j = 0; j < size_; ++j) {
-
 			QRgb rgb = board_[i * size_ + j] ? black : white;
-
-			drawSquare(
-				painter,
-				rect.left() + j * squareWidth(),
-				boardTop + i * squareHeight(),
-				rgb
-			);
+			QRectF tile(j * squareWidth() + margin, i * squareHeight() + margin,
+						squareWidth() - margin, squareHeight() - margin);
+			painter.fillRect(tile, rgb);
 		}
 	}
 }
@@ -92,13 +81,10 @@ void CGOLBoard::timerEvent(QTimerEvent *event)
 	timer_.start(timeoutTime(), this);
 }
 
-void CGOLBoard::start()
+void CGOLBoard::wheelEvent(QWheelEvent *event)
 {
-	initRandom();
-	timer_.start(timeoutTime(), this);
-}
-
-void CGOLBoard::setSpeed(int speed)
-{
-	speed_ = speed;
+	QWidget::wheelEvent(event);
+	scale_ += (event->delta() / 1200.0);
+	scale_ = std::fmin(5.0, std::fmax(1.0, scale_));
+	update();
 }

@@ -1,12 +1,15 @@
 TODO:
+ - Zoom functionality
  - try TDD :)
  - Game field size slider
- - Zoom functionality
- - squareHeight squareWidth to one function or separate width,height?
+ - squareHeight squareWidth to one function or separate width,height ?
  - Variable game field size
  - Optimize game logic
+ - QPixmap for drawing ?
 
 DONE:
  - Game field drawing at variable speed
  - Fixed field size first
  - Game logic
+ - Fix board drawing bug
+
