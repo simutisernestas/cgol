@@ -1,8 +1,8 @@
-#include "./ui_cgol.h"
+#include "../resources/ui_cgol.h"
 #include <QtWidgets/QPushButton>
 #include <utility>
 
-#include "cgol_window.hpp"
+#include "include/cgol_window.hpp"
 
 CGOLWindow::CGOLWindow(std::shared_ptr<CGOLBoard> board, QWidget *parent)
 	: QWidget{parent},

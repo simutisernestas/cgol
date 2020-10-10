@@ -1,5 +1,5 @@
 #include <QTest>
-#include "cgol_window.hpp"
+#include "include/cgol_window.hpp"
 
 
 class TestGUI: public QObject

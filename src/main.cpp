@@ -1,7 +1,7 @@
 #include <memory>
 
-#include "cgol_window.hpp"
-#include "cgol_board.hpp"
+#include "include/cgol_window.hpp"
+#include "include/cgol_board.hpp"
 
 #include <QApplication>
 

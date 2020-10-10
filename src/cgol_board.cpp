@@ -1,6 +1,6 @@
 #include <algorithm>
 
-#include "cgol_board.hpp"
+#include "include/cgol_board.hpp"
 
 CGOLBoard::CGOLBoard()
 	: size_{},

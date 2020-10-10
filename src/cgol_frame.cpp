@@ -4,8 +4,8 @@
 #include <QtGui/QPaintEvent>
 #include <utility>
 
-#include "cgol_frame.hpp"
-#include "cgol_logic.hpp"
+#include "include/cgol_frame.hpp"
+#include "include/cgol_logic.hpp"
 
 CGOLFrame::CGOLFrame(std::shared_ptr<CGOLBoard> board_ptr, QWidget *parent)
 	: QFrame{parent},

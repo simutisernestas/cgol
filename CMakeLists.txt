@@ -23,16 +23,16 @@ include_directories(${Qt5Widgets_INCLUDE_DIRS})
 
 set(library_name ${PROJECT_NAME}_lib)
 
-add_library(${library_name}
-        cgol_window.cpp
-        cgol_frame.cpp
-        cgol_board.cpp
-        cgol_logic.cpp)
+file(GLOB_RECURSE sources CONFIGURE_DEPENDS src/*.cpp include/*.hpp)
+add_library(${library_name} ${sources})
 target_link_libraries(${library_name} PUBLIC Qt5::Widgets)
+target_include_directories(${library_name} PUBLIC include)
 
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} src/main.cpp)
 target_link_libraries(cgol PRIVATE ${library_name})
 
-add_executable(test_gui test_gui.cpp)
+add_executable(test_gui test/test_gui.cpp)
 add_test(test_gui test_gui)
 target_link_libraries(test_gui PRIVATE Qt5::Test ${library_name})
+
+install(DIRECTORY include DESTINATION ${CMAKE_INSTALL_PREFIX}/include)

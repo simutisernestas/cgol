@@ -1,5 +1,5 @@
 #include <algorithm>
-#include "cgol_logic.hpp"
+#include "include/cgol_logic.hpp"
 #include <cstddef>
 
 void CGOLLogic::runGeneration(std::shared_ptr<CGOLBoard> board)

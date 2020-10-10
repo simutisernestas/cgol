@@ -1,5 +1,5 @@
 #include "test_gui.hpp"
-#include "cgol_logic.hpp"
+#include "include/cgol_logic.hpp"
 
 #include <QSignalSpy>
 #include <QSlider>
