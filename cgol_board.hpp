@@ -6,6 +6,8 @@
 #include <random>
 #include "cgol_logic.hpp"
 
+using std::byte;
+
 class CGOLBoard: public QFrame
 {
 Q_OBJECT
@@ -16,6 +18,7 @@ public:
 public slots:
 	void start();
 	void setSpeed(int speed);
+	void setSize(int size);
 
 protected:
 	void paintEvent(QPaintEvent *event) override;
@@ -25,23 +28,31 @@ protected:
 	void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
-	static constexpr int size_ = 100; // square
+	int size_; // rectangular board
 	QBasicTimer timer_;
-	bool board_[size_ * size_];
+	std::vector<byte> board_;
 	std::mt19937 rng_;
 	std::uniform_int_distribution<std::mt19937::result_type> random_dist_;
 	int speed_;
-	CGOLLogic game_logic_;
 	float scale_;
 	QPoint mouse_offset_;
 	QPoint panning_vector_;
+	float margin_;
 
-	inline float squareWidth()
-	{ return width() / static_cast<float>(size_); }
-	inline float squareHeight()
-	{ return height() / static_cast<float>(size_); }
+	[[nodiscard]] inline float tileWidth() const
+	{
+		return static_cast<float>(width()) / static_cast<float>(size_);
+	}
+
+	[[nodiscard]] inline float tileHeight() const
+	{
+		return static_cast<float>(height()) / static_cast<float>(size_);
+	}
+
 	[[nodiscard]] inline int timeoutTime() const
-	{ return 500 / (speed_ + 1); }
+	{
+		return 500 / (speed_ + 1);
+	}
 
 	void initEmpty();
 	void initRandom();

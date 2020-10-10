@@ -11,6 +11,10 @@ CGOLWindow::CGOLWindow(QWidget *parent)
 	connect(ui->startButton, &QPushButton::clicked, cgol_board_, &CGOLBoard::start);
 	connect(ui->speedSlider, &QSlider::valueChanged, cgol_board_, &CGOLBoard::setSpeed);
 	ui->speedSlider->setValue(10);
+	ui->speedSlider->setRange(1, 200);
+	connect(ui->boardSizeSlider, &QSlider::valueChanged, cgol_board_, &CGOLBoard::setSize);
+	ui->boardSizeSlider->setRange(20, 200);
+	ui->boardSizeSlider->setValue(50);
 }
 
 CGOLWindow::~CGOLWindow()

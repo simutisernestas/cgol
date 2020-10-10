@@ -1,8 +1,5 @@
 TODO:
  - try TDD :)
- - Variable game field size (slider?)
- - squareHeight squareWidth to one function or separate width,height ?
- - Optimize game logic
  - Fix outer margin
  - Zoom into mouse pos ?
 
@@ -15,3 +12,5 @@ DONE:
  - Find mouse events bug
  - Panning
  - Fix zoom wobble (kind of)
+ - Refactor game logic
+ - Variable game field size (slider)
