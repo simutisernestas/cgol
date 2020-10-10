@@ -1,4 +1,4 @@
-#include "test/include/test_gui.hpp"
+#include "test_gui.hpp"
 #include "include/cgol_logic.hpp"
 
 #include <QSignalSpy>
