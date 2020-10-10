@@ -24,12 +24,16 @@ include_directories(${Qt5Widgets_INCLUDE_DIRS})
 add_executable(cgol
         main.cpp
         cgol_window.cpp
+        cgol_frame.cpp
         cgol_board.cpp
         cgol_logic.cpp)
 target_link_libraries(cgol PRIVATE Qt5::Widgets)
 
 add_executable(test_gui
         test_gui.cpp
-        cgol_window.cpp)
+        cgol_window.cpp
+        cgol_frame.cpp
+        cgol_board.cpp
+        cgol_logic.cpp)
 add_test(test_gui test_gui)
 target_link_libraries(test_gui PRIVATE Qt5::Widgets Qt5::Test)

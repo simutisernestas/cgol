@@ -1,23 +1,22 @@
 #ifndef CGOL_LOGIC_HPP
 #define CGOL_LOGIC_HPP
 
+#include <memory>
+
+#include "cgol_board.hpp"
+
 using std::byte;
 
 class CGOLLogic
 {
 
 public:
-	static void runGeneration(std::vector<byte> &board, const int &width);
+	static void runGeneration(std::shared_ptr<CGOLBoard> board);
 
-	static inline bool isCellAlive(byte cell)
-	{
-		return cell == byte{1};
-	}
+	static bool isCellAlive(std::shared_ptr<CGOLBoard> board, const int &row, const int &col);
 
-// prevent object creation, since only static methods available
-private:
-	CGOLLogic() = default;
-public:
+	// prevent object creation - only static methods available
+	CGOLLogic() = delete;
 	CGOLLogic(CGOLLogic const &) = delete;
 	void operator=(CGOLLogic const &) = delete;
 

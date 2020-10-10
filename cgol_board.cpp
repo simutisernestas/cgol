@@ -1,41 +1,31 @@
-#include "cgol_board.hpp"
-#include <QPainter>
-#include <QRgb>
-#include <QTimerEvent>
-#include <QtGui/QPaintEvent>
 #include <algorithm>
 
-CGOLBoard::CGOLBoard(QWidget *parent)
-	: QFrame{parent},
-	  size_{},
+#include "cgol_board.hpp"
+
+CGOLBoard::CGOLBoard()
+	: size_{},
 	  rng_{std::random_device()()},
-	  random_dist_{1, 10},
-	  speed_{0},
-	  scale_{1.0},
-	  mouse_offset_{},
-	  panning_vector_{},
-	  margin_{}
+	  random_dist_{1, 10}
 {
 }
 
-void CGOLBoard::start()
+void CGOLBoard::initState(const CGOLBoard::State &s)
 {
-	initRandom();
-	timer_.start(timeoutTime(), this);
+	switch (s) {
+		case CGOLBoard::State::Random: initRandom();
+			break;
+		case CGOLBoard::State::Empty: initEmpty();
+			break;
+		case CGOLBoard::State::Checkered: initCheckered();
+			break;
+	}
 }
 
-void CGOLBoard::setSpeed(int speed)
-{
-	speed_ = speed;
-}
-
-void CGOLBoard::setSize(int size)
+void CGOLBoard::setSize(const int &size)
 {
 	size_ = size;
-	margin_ = std::ceil(100 / static_cast<float>(size_));
 	board_.resize(size_ * size_);
 	std::fill(board_.begin(), board_.end(), byte{0});
-	update();
 }
 
 void CGOLBoard::initEmpty()
@@ -61,67 +51,17 @@ void CGOLBoard::initCheckered()
 	}
 }
 
-void CGOLBoard::paintEvent(QPaintEvent *)
+void CGOLBoard::setAt(const byte &value, const int &row, const int &col)
 {
-	static constexpr QRgb black = 0x000000;
-	static constexpr QRgb white = 0xffffff;
-
-	QPainter painter(this);
-	painter.scale(scale_, scale_);
-
-	int row_offset = std::floor((static_cast<float>(size_) * (1 - 1 / scale_)) / 2);
-	int col_offset = row_offset;
-
-	int drawn_view_side_len = std::ceil(static_cast<float>(size_) / scale_); // TODO ceil?
-
-	if (scale_ > 1) {
-		row_offset = std::clamp(row_offset - panning_vector_.y(), 0, size_ - drawn_view_side_len);
-		col_offset = std::clamp(col_offset - panning_vector_.x(), 0, size_ - drawn_view_side_len);
-	}
-
-	float tile_width = tileWidth();
-	float tile_height = tileHeight();
-	for (int row = row_offset; row < row_offset + drawn_view_side_len; ++row) {
-		for (int col = col_offset; col < col_offset + drawn_view_side_len; ++col) {
-			QRgb rgb = CGOLLogic::isCellAlive(board_[row * size_ + col]) ? black : white;
-
-			QRectF tile(static_cast<float>(col - col_offset) * tile_width + margin_,
-						static_cast<float>(row - row_offset) * tile_height + margin_,
-						tile_width - margin_,
-						tile_height - margin_);
-			painter.fillRect(tile, rgb);
-		}
-	}
+	board_[row * size_ + col] = value;
 }
 
-void CGOLBoard::timerEvent(QTimerEvent *event)
+int CGOLBoard::getSize() const
 {
-	if (event->timerId() != timer_.timerId()) {
-		QFrame::timerEvent(event);
-		return;
-	}
-
-	CGOLLogic::runGeneration(board_, size_);
-	update();
-	timer_.start(timeoutTime(), this);
+	return size_;
 }
 
-void CGOLBoard::wheelEvent(QWheelEvent *event)
+const byte &CGOLBoard::getAt(const int &row, const int &col) const
 {
-	scale_ *= event->delta() < 0 ? 0.95f : 1.05f;
-	scale_ = std::clamp(scale_, 1.0f, 7.0f);
-	update();
-}
-
-void CGOLBoard::mouseMoveEvent(QMouseEvent *event)
-{
-	if (event->buttons() & Qt::LeftButton) {
-		panning_vector_ = event->pos() - mouse_offset_;
-		update();
-	}
-}
-
-void CGOLBoard::mousePressEvent(QMouseEvent *event)
-{
-	mouse_offset_ = event->pos();
+	return board_[row * size_ + col];
 }

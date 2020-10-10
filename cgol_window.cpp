@@ -1,23 +1,27 @@
-#include "cgol_window.hpp"
 #include "./ui_cgol.h"
+#include <QtWidgets/QPushButton>
+#include <utility>
 
-CGOLWindow::CGOLWindow(QWidget *parent)
+#include "cgol_window.hpp"
+
+CGOLWindow::CGOLWindow(std::shared_ptr<CGOLBoard> board, QWidget *parent)
 	: QWidget{parent},
-	  ui{new Ui::CGOLWindow},
-	  cgol_board_{new CGOLBoard(this)}
+	  ui_{std::make_unique<Ui::CGOLWindow>()},
+	  cgol_board_{std::move(board)},
+	  cgol_frame_{std::make_unique<CGOLFrame>(cgol_board_, this)}
 {
-	ui->setupUi(this);
-	ui->verticalLayout->addWidget(cgol_board_);
-	connect(ui->startButton, &QPushButton::clicked, cgol_board_, &CGOLBoard::start);
-	connect(ui->speedSlider, &QSlider::valueChanged, cgol_board_, &CGOLBoard::setSpeed);
-	ui->speedSlider->setValue(10);
-	ui->speedSlider->setRange(1, 200);
-	connect(ui->boardSizeSlider, &QSlider::valueChanged, cgol_board_, &CGOLBoard::setSize);
-	ui->boardSizeSlider->setRange(20, 200);
-	ui->boardSizeSlider->setValue(50);
+	ui_->setupUi(this);
+	ui_->verticalLayout->addWidget(cgol_frame_.get());
+	connect(ui_->boardSizeSlider,
+			&QSlider::valueChanged,
+			cgol_frame_.get(),
+			&CGOLFrame::sizeSliderValueChangedCallback);
+	ui_->boardSizeSlider->setRange(20, 200);
+	ui_->boardSizeSlider->setValue(50);
+	connect(ui_->startButton, &QPushButton::clicked, cgol_frame_.get(), &CGOLFrame::start);
+	connect(ui_->speedSlider, &QSlider::valueChanged, cgol_frame_.get(), &CGOLFrame::speedSliderValueChangedCallback);
+	ui_->speedSlider->setValue(10);
+	ui_->speedSlider->setRange(1, 300);
 }
 
-CGOLWindow::~CGOLWindow()
-{
-	delete ui;
-}
+CGOLWindow::~CGOLWindow() = default;

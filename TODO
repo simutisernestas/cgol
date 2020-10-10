@@ -1,7 +1,9 @@
 TODO:
- - try TDD :)
+ - Unit tests
+ - Multi threaded
  - Fix outer margin
  - Zoom into mouse pos ?
+ - Panning & zoom still buggy
 
 DONE:
  - Game field drawing at variable speed

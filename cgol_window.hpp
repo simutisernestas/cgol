@@ -2,9 +2,9 @@
 #define CGOL_WINDOW_HPP
 
 #include <QWidget>
+#include "cgol_frame.hpp"
 #include "cgol_board.hpp"
 #include <memory>
-#include <QtWidgets/QPushButton>
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -19,11 +19,12 @@ class CGOLWindow: public QWidget
 Q_OBJECT
 
 public:
-	explicit CGOLWindow(QWidget *parent = nullptr);
+	explicit CGOLWindow(std::shared_ptr<CGOLBoard> board, QWidget *parent = nullptr);
 	~CGOLWindow() override;
 
 private:
-	Ui::CGOLWindow *ui;
-	CGOLBoard *cgol_board_;
+	std::unique_ptr<Ui::CGOLWindow> ui_;
+	std::shared_ptr<CGOLBoard> cgol_board_;
+	std::unique_ptr<CGOLFrame> cgol_frame_;
 };
 #endif // CGOL_H
