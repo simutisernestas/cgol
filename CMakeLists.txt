@@ -31,8 +31,7 @@ target_include_directories(${library_name} PUBLIC include)
 add_executable(${PROJECT_NAME} src/main.cpp)
 target_link_libraries(cgol PRIVATE ${library_name})
 
-add_executable(test_gui test/test_gui.cpp)
+file(GLOB_RECURSE test_sources CONFIGURE_DEPENDS test/*.cpp test/include/*.hpp)
+add_executable(test_gui ${test_sources})
 add_test(test_gui test_gui)
 target_link_libraries(test_gui PRIVATE Qt5::Test ${library_name})
-
-install(DIRECTORY include DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
