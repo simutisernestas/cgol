@@ -21,19 +21,18 @@ find_package(Qt5 COMPONENTS Widgets Test REQUIRED)
 
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
 
-add_executable(cgol
-        main.cpp
-        cgol_window.cpp
-        cgol_frame.cpp
-        cgol_board.cpp
-        cgol_logic.cpp)
-target_link_libraries(cgol PRIVATE Qt5::Widgets)
+set(library_name ${PROJECT_NAME}_lib)
 
-add_executable(test_gui
-        test_gui.cpp
+add_library(${library_name}
         cgol_window.cpp
         cgol_frame.cpp
         cgol_board.cpp
         cgol_logic.cpp)
+target_link_libraries(${library_name} PUBLIC Qt5::Widgets)
+
+add_executable(${PROJECT_NAME} main.cpp)
+target_link_libraries(cgol PRIVATE ${library_name})
+
+add_executable(test_gui test_gui.cpp)
 add_test(test_gui test_gui)
-target_link_libraries(test_gui PRIVATE Qt5::Widgets Qt5::Test)
+target_link_libraries(test_gui PRIVATE Qt5::Test ${library_name})

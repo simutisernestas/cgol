@@ -1,5 +1,5 @@
 TODO:
- - Unit tests
+ - Game board unit tests
  - Multi threaded
  - Fix outer margin
  - Zoom into mouse pos ?
@@ -16,3 +16,4 @@ DONE:
  - Fix zoom wobble (kind of)
  - Refactor game logic
  - Variable game field size (slider)
+ - GUI Unit tests
