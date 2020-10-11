@@ -1,4 +1,4 @@
-Build & Launch
+### Build & Launch
 ```
 mkdir -p build && cd build
 cmake ..
@@ -12,7 +12,7 @@ chmod +x build.sh
 ./build.sh
 ```
 
-Implementation considerations & Possible improvements
+### Implementation considerations & Possible improvements
 - Drawing is big bottle-neck for performance with large size of the board.
 - Potential improvement could be - hand over rendering to separate thread.
 - First time working with Qt. In the beginning i've selected to draw rectangles manually with painter, which I guess is not an optimal solution for rendering. QPixmap seems like appropriate thing to use here. 
