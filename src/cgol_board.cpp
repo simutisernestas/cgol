@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <QtCore/QMetaType>
 
 #include "include/cgol_board.hpp"
 
@@ -10,7 +11,8 @@ CGOLBoard::CGOLBoard()
 }
 
 CGOLBoard::CGOLBoard(const int &size, const CGOLBoard::State &init_state)
-	: rng_{std::random_device()()},
+	: size_{size},
+	  rng_{std::random_device()()},
 	  random_dist_{1, 10}
 {
 	initBoard(size, init_state);
@@ -63,7 +65,7 @@ void CGOLBoard::setAt(const byte &value, const int &row, const int &col)
 	int index = row * size_ + col;
 
 	if (index >= size_ * size_ || row < 0 || col < 0)
-		throw std::out_of_range("Board index out of range.");
+		throw std::out_of_range("Board index out of range, while setting tile value.");
 
 	board_[index] = value;
 }
@@ -78,7 +80,9 @@ const byte &CGOLBoard::getAt(const int &row, const int &col) const
 	int index = row * size_ + col;
 
 	if (index >= size_ * size_ || row < 0 || col < 0)
-		throw std::out_of_range("Board index out of range.");
+		throw std::out_of_range("Board index out of range, while getting tile value.");
 
 	return board_[index];
 }
+
+Q_DECLARE_METATYPE(CGOLBoard)

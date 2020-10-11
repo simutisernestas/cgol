@@ -8,6 +8,7 @@
 #include <QBasicTimer>
 
 #include "cgol_board.hpp"
+#include "cgol_loop_thread.hpp"
 
 using std::byte;
 
@@ -24,23 +25,23 @@ public slots:
 	void speedSliderValueChangedCallback(const int &speed);
 	void sizeSliderValueChangedCallback(const int &size);
 
+private slots:
+	void updateBoard(CGOLBoard board); // intensional copy
+
 protected:
 	void paintEvent(QPaintEvent *event) override;
-	void timerEvent(QTimerEvent *event) override;
 	void wheelEvent(QWheelEvent *event) override;
 	void mousePressEvent(QMouseEvent *event) override;
 	void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
-	QBasicTimer timer_;
-	int speed_;
 	float scale_;
 	QPoint mouse_offset_;
 	QPoint panning_vector_;
 	float margin_;
 	std::shared_ptr<CGOLBoard> board_;
+	CGOLLoopThread game_loop_thread_;
 
-	[[nodiscard]] int timeoutTime() const;
 	[[nodiscard]] float tileHeight() const;
 	[[nodiscard]] float tileWidth() const;
 };

@@ -5,32 +5,38 @@
 #include <QSlider>
 #include <QPushButton>
 
-TestGUI::TestGUI()
-{
-	board_ = std::make_shared<CGOLBoard>();
-	window_ = std::make_unique<CGOLWindow>(board_);
-}
-
 void TestGUI::test_cgol_frame_exist_in_the_main_window()
 {
+	auto board_ = std::make_shared<CGOLBoard>();
+	auto window_ = std::make_shared<CGOLWindow>(board_);
+
 	auto *frame = window_->findChild<CGOLFrame *>();
 	QVERIFY(frame != nullptr);
 }
 
 void TestGUI::test_game_speed_slider_exist_in_the_main_window()
 {
+	auto board_ = std::make_shared<CGOLBoard>();
+	auto window_ = std::make_shared<CGOLWindow>(board_);
+
 	auto *slider = window_->findChild<QSlider *>("speedSlider");
 	QVERIFY(slider != nullptr);
 }
 
 void TestGUI::test_board_size_slider_exist_in_the_main_window()
 {
+	auto board_ = std::make_shared<CGOLBoard>();
+	auto window_ = std::make_shared<CGOLWindow>(board_);
+
 	auto *slider = window_->findChild<QSlider *>("boardSizeSlider");
 	QVERIFY(slider != nullptr);
 }
 
 void TestGUI::test_game_speed_slider_response_to_signal()
 {
+	auto board_ = std::make_shared<CGOLBoard>();
+	auto window_ = std::make_shared<CGOLWindow>(board_);
+
 	auto *slider = window_->findChild<QSlider *>("speedSlider");
 
 	// listen for signal
@@ -51,6 +57,9 @@ void TestGUI::test_game_speed_slider_response_to_signal()
 
 void TestGUI::test_game_speed_slider_changes_game_frame_speed()
 {
+	auto board_ = std::make_shared<CGOLBoard>();
+	auto window_ = std::make_shared<CGOLWindow>(board_);
+
 	auto *slider = window_->findChild<QSlider *>("speedSlider");
 
 	// listen for signal
@@ -68,6 +77,9 @@ void TestGUI::test_game_speed_slider_changes_game_frame_speed()
 
 void TestGUI::test_game_board_size_slider_response_to_signal()
 {
+	auto board_ = std::make_shared<CGOLBoard>();
+	auto window_ = std::make_shared<CGOLWindow>(board_);
+
 	auto *slider = window_->findChild<QSlider *>("boardSizeSlider");
 
 	// listen for signal
@@ -87,6 +99,9 @@ void TestGUI::test_game_board_size_slider_response_to_signal()
 
 void TestGUI::test_game_board_size_slider_changes_board_size()
 {
+	auto board_ = std::make_shared<CGOLBoard>();
+	auto window_ = std::make_shared<CGOLWindow>(board_);
+
 	auto *slider = window_->findChild<QSlider *>("boardSizeSlider");
 
 	// listen for signal
@@ -97,18 +112,29 @@ void TestGUI::test_game_board_size_slider_changes_board_size()
 	int value = 88;
 	slider->setValue(value);
 
+	// start game loop thread to update the board
+	auto *button = window_->findChild<QPushButton *>("startButton");
+	button->click();
+	QTest::qWait(200);
+
 	// board is proper size
 	QCOMPARE(board_->getSize(), value);
 }
 
 void TestGUI::test_start_button_exist_in_the_main_window()
 {
+	auto board_ = std::make_shared<CGOLBoard>();
+	auto window_ = std::make_shared<CGOLWindow>(board_);
+
 	auto *button = window_->findChild<QPushButton *>("startButton");
 	QVERIFY(button != nullptr);
 }
 
 void TestGUI::test_start_button_initializes_the_game()
 {
+	auto board_ = std::make_shared<CGOLBoard>();
+	auto window_ = std::make_shared<CGOLWindow>(board_);
+
 	auto *button = window_->findChild<QPushButton *>("startButton");
 
 	// listen for signal
@@ -116,6 +142,7 @@ void TestGUI::test_start_button_initializes_the_game()
 	QCOMPARE(spy.isValid(), true);
 
 	button->click();
+	QTest::qWait(100);
 
 	bool have_at_least_one_alive_cell = false;
 
@@ -134,6 +161,9 @@ void TestGUI::test_start_button_initializes_the_game()
 
 void TestGUI::test_board_is_empty_after_game_size_change()
 {
+	auto board_ = std::make_shared<CGOLBoard>();
+	auto window_ = std::make_shared<CGOLWindow>(board_);
+
 	auto *slider = window_->findChild<QSlider *>("boardSizeSlider");
 
 	// listen for signal
@@ -141,7 +171,7 @@ void TestGUI::test_board_is_empty_after_game_size_change()
 	QCOMPARE(spy.isValid(), true);
 
 	// emit action
-	slider->setValue(12);
+	slider->setValue(88);
 	// action recorded
 	QCOMPARE(spy.count(), 1);
 
@@ -162,6 +192,9 @@ void TestGUI::test_board_is_empty_after_game_size_change()
 
 void TestGUI::test_board_slider_sets_values_in_expected_range()
 {
+	auto board_ = std::make_shared<CGOLBoard>();
+	auto window_ = std::make_shared<CGOLWindow>(board_);
+
 	auto *slider = window_->findChild<QSlider *>("boardSizeSlider");
 
 	// listen for signal
@@ -175,6 +208,12 @@ void TestGUI::test_board_slider_sets_values_in_expected_range()
 	slider->setValue(max + 100);
 	// action recorded
 	QCOMPARE(spy.count(), 1);
+
+	// start game loop thread to update the board
+	auto *button = window_->findChild<QPushButton *>("startButton");
+	button->click();
+	QTest::qWait(400);
+
 	// value is clipped
 	QCOMPARE(board_->getSize(), max);
 
@@ -182,12 +221,20 @@ void TestGUI::test_board_slider_sets_values_in_expected_range()
 	slider->setValue(min - 100);
 	// action recorded
 	QCOMPARE(spy.count(), 2);
+
+	// start game loop thread to update the board
+	button->click();
+	QTest::qWait(100);
+
 	// value is clipped
 	QCOMPARE(board_->getSize(), min);
 }
 
 void TestGUI::test_game_speed_slider_sets_values_in_expected_range()
 {
+	auto board_ = std::make_shared<CGOLBoard>();
+	auto window_ = std::make_shared<CGOLWindow>(board_);
+
 	auto *slider = window_->findChild<QSlider *>("speedSlider");
 	auto *frame = window_->findChild<CGOLFrame *>();
 	QVERIFY(frame != nullptr);

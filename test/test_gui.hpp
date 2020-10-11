@@ -9,13 +9,6 @@ class TestGUI: public QObject
 {
 Q_OBJECT
 
-public:
-	TestGUI();
-
-private:
-	std::unique_ptr<CGOLWindow> window_;
-	std::shared_ptr<CGOLBoard> board_;
-
 private slots:
 	void test_game_speed_slider_response_to_signal();
 	void test_game_speed_slider_changes_game_frame_speed();
