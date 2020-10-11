@@ -39,7 +39,7 @@ void CGOLLogic::runGeneration(std::shared_ptr<CGOLBoard> board)
 	*board = *tmp_board;
 }
 
-bool CGOLLogic::isCellAlive(std::shared_ptr<CGOLBoard> board, const int &row, const int &col)
+bool CGOLLogic::isCellAlive(const std::shared_ptr<CGOLBoard> &board, const int &row, const int &col)
 {
 	return board->getAt(row, col) == byte{1};
 }

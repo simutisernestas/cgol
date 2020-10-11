@@ -13,7 +13,7 @@ class CGOLLogic
 public:
 	static void runGeneration(std::shared_ptr<CGOLBoard> board);
 
-	static bool isCellAlive(std::shared_ptr<CGOLBoard> board, const int &row, const int &col);
+	static bool isCellAlive(const std::shared_ptr<CGOLBoard> &board, const int &row, const int &col);
 
 	// prevent object creation - only static methods available
 	CGOLLogic() = delete;
