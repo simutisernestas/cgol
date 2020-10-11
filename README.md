@@ -1,16 +1,13 @@
 Build & Launch
 ```
-mkdir build && cd build
+mkdir -p build && cd build
 cmake ..
-make
-./cgol
+make -j8
+ctest -j8   # run test
+./cgol      # launch app
 ```
 or
 ```
 chmod +x build.sh
 ./build.sh
-```
-Run tests
-```
-./test_gui
 ```
