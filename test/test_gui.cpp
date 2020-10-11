@@ -132,4 +132,86 @@ void TestGUI::test_start_button_initializes_the_game()
 	QCOMPARE(have_at_least_one_alive_cell, true);
 }
 
+void TestGUI::test_board_is_empty_after_game_size_change()
+{
+	auto *slider = window_->findChild<QSlider *>("boardSizeSlider");
+
+	// listen for signal
+	QSignalSpy spy(slider, SIGNAL(valueChanged(int)));
+	QCOMPARE(spy.isValid(), true);
+
+	// emit action
+	slider->setValue(12);
+	// action recorded
+	QCOMPARE(spy.count(), 1);
+
+	bool have_at_least_one_alive_cell = false;
+
+	for (int row = 0; row < board_->getSize(); ++row) {
+		for (int col = 0; col < board_->getSize(); ++col) {
+			if (!CGOLLogic::isCellAlive(board_, row, col))
+				continue;
+			have_at_least_one_alive_cell = true;
+			break;
+		}
+		if (have_at_least_one_alive_cell) break;
+	}
+
+	QCOMPARE(have_at_least_one_alive_cell, false);
+}
+
+void TestGUI::test_board_slider_sets_values_in_expected_range()
+{
+	auto *slider = window_->findChild<QSlider *>("boardSizeSlider");
+
+	// listen for signal
+	QSignalSpy spy(slider, SIGNAL(valueChanged(int)));
+	QCOMPARE(spy.isValid(), true);
+
+	int max = CGOLWindow::BOARD_SIZE_RANGE_MAX;
+	int min = CGOLWindow::BOARD_SIZE_RANGE_MIN;
+
+	// set value out of range
+	slider->setValue(max + 100);
+	// action recorded
+	QCOMPARE(spy.count(), 1);
+	// value is clipped
+	QCOMPARE(board_->getSize(), max);
+
+	// set value out of range
+	slider->setValue(min - 100);
+	// action recorded
+	QCOMPARE(spy.count(), 2);
+	// value is clipped
+	QCOMPARE(board_->getSize(), min);
+}
+
+void TestGUI::test_game_speed_slider_sets_values_in_expected_range()
+{
+	auto *slider = window_->findChild<QSlider *>("speedSlider");
+	auto *frame = window_->findChild<CGOLFrame *>();
+	QVERIFY(frame != nullptr);
+
+	// listen for signal
+	QSignalSpy spy(slider, SIGNAL(valueChanged(int)));
+	QCOMPARE(spy.isValid(), true);
+
+	int max = CGOLWindow::GAME_SPEED_RANGE_MAX;
+	int min = CGOLWindow::GAME_SPEED_RANGE_MIN;
+
+	// set value out of range
+	slider->setValue(max + 100);
+	// action recorded
+	QCOMPARE(spy.count(), 1);
+	// value is clipped
+	QCOMPARE(frame->getSpeed(), max);
+
+	// set value out of range
+	slider->setValue(min - 100);
+	// action recorded
+	QCOMPARE(spy.count(), 2);
+	// value is clipped
+	QCOMPARE(frame->getSpeed(), min);
+}
+
 QTEST_MAIN(TestGUI)

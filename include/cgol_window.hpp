@@ -15,10 +15,16 @@ QT_END_NAMESPACE
 
 class CGOLWindow: public QWidget
 {
-
 Q_OBJECT
 
 public:
+	static const int BOARD_SIZE_RANGE_MIN = 20;
+	static const int BOARD_SIZE_RANGE_MAX = 200;
+	static const int BOARD_SIZE_DEFAULT = 50;
+	static const int GAME_SPEED_RANGE_MIN = 1;
+	static const int GAME_SPEED_RANGE_MAX = 300;
+	static const int GAME_SPEED_DEFAULT = 10;
+
 	explicit CGOLWindow(std::shared_ptr<CGOLBoard> board, QWidget *parent = nullptr);
 	~CGOLWindow() override;
 

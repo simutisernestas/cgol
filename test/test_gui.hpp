@@ -1,6 +1,9 @@
-#include <QTest>
-#include "include/cgol_window.hpp"
+#ifndef TEST_GUI_HPP
+#define TEST_GUI_HPP
 
+#include <QTest>
+
+#include "include/cgol_window.hpp"
 
 class TestGUI: public QObject
 {
@@ -23,4 +26,9 @@ private slots:
 	void test_board_size_slider_exist_in_the_main_window();
 	void test_start_button_exist_in_the_main_window();
 	void test_start_button_initializes_the_game();
+	void test_board_is_empty_after_game_size_change();
+	void test_board_slider_sets_values_in_expected_range();
+	void test_game_speed_slider_sets_values_in_expected_range();
 };
+
+#endif //TEST_GUI_HPP
