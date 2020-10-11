@@ -9,6 +9,20 @@ CGOLBoard::CGOLBoard()
 {
 }
 
+CGOLBoard::CGOLBoard(const int &size, const CGOLBoard::State &init_state)
+	: rng_{std::random_device()()},
+	  random_dist_{1, 10}
+{
+	initBoard(size, init_state);
+}
+
+void CGOLBoard::initBoard(const int &size, const CGOLBoard::State &s)
+{
+	size_ = size;
+	board_.resize(size_ * size_);
+	initState(s);
+}
+
 void CGOLBoard::initState(const CGOLBoard::State &s)
 {
 	switch (s) {
@@ -19,13 +33,6 @@ void CGOLBoard::initState(const CGOLBoard::State &s)
 		case CGOLBoard::State::Checkered: initCheckered();
 			break;
 	}
-}
-
-void CGOLBoard::setSize(const int &size)
-{
-	size_ = size;
-	board_.resize(size_ * size_);
-	std::fill(board_.begin(), board_.end(), byte{0});
 }
 
 void CGOLBoard::initEmpty()
@@ -53,7 +60,12 @@ void CGOLBoard::initCheckered()
 
 void CGOLBoard::setAt(const byte &value, const int &row, const int &col)
 {
-	board_[row * size_ + col] = value;
+	int index = row * size_ + col;
+
+	if (index >= size_ * size_ || row < 0 || col < 0)
+		throw std::out_of_range("Board index out of range.");
+
+	board_[index] = value;
 }
 
 int CGOLBoard::getSize() const
@@ -63,5 +75,10 @@ int CGOLBoard::getSize() const
 
 const byte &CGOLBoard::getAt(const int &row, const int &col) const
 {
-	return board_[row * size_ + col];
+	int index = row * size_ + col;
+
+	if (index >= size_ * size_ || row < 0 || col < 0)
+		throw std::out_of_range("Board index out of range.");
+
+	return board_[index];
 }

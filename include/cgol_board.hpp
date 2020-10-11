@@ -16,14 +16,15 @@ public:
 	};
 
 	CGOLBoard();
+	explicit CGOLBoard(const int& size, const State& init_state = Empty);
 
 	[[nodiscard]] int getSize() const;
-	void setSize(const int &size);
 
 	[[nodiscard]] const byte &getAt(const int &row, const int &col) const;
 	void setAt(const byte &value, const int &row, const int &col);
 
 	void initState(const CGOLBoard::State &s);
+	void initBoard(const int &size, const CGOLBoard::State &s);
 
 private:
 	int size_; // equal sides

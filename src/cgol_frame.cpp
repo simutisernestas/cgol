@@ -31,7 +31,7 @@ void CGOLFrame::speedSliderValueChangedCallback(const int &speed)
 
 void CGOLFrame::sizeSliderValueChangedCallback(const int &size)
 {
-	board_->setSize(size);
+	board_->initBoard(size, CGOLBoard::Empty);
 	margin_ = std::ceil(100 / static_cast<float>(size));
 	update();
 }
