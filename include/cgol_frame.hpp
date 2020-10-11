@@ -33,11 +33,12 @@ protected:
 	void wheelEvent(QWheelEvent *event) override;
 	void mousePressEvent(QMouseEvent *event) override;
 	void mouseMoveEvent(QMouseEvent *event) override;
+	void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
 	float scale_;
-	QPoint mouse_offset_;
-	QPoint panning_vector_;
+	QPoint drag_start_point_;
+	QPoint panning_offset_;
 	float margin_;
 	std::shared_ptr<CGOLBoard> board_;
 	CGOLLoopThread game_loop_thread_;

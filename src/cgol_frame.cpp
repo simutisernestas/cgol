@@ -10,8 +10,8 @@
 CGOLFrame::CGOLFrame(std::shared_ptr<CGOLBoard> board_ptr, QWidget *parent)
 	: QFrame{parent},
 	  scale_{1.0},
-	  mouse_offset_{},
-	  panning_vector_{},
+	  drag_start_point_{},
+	  panning_offset_{},
 	  margin_{},
 	  board_{std::move(board_ptr)},
 	  game_loop_thread_{}
@@ -24,7 +24,6 @@ void CGOLFrame::start()
 {
 	game_loop_thread_.reset(CGOLBoard::State::Random);
 }
-
 
 void CGOLFrame::speedSliderValueChangedCallback(const int &speed)
 {
@@ -44,14 +43,14 @@ void CGOLFrame::paintEvent(QPaintEvent *)
 	painter.setRenderHint(QPainter::Antialiasing);
 	painter.scale(scale_, scale_);
 
-	int row_offset = std::floor((static_cast<float>(board_->getSize()) * (1 - 1 / scale_)) / 2);
-	int col_offset = row_offset;
+	auto board_size = static_cast<float>(board_->getSize());
+	int scale_offset = std::floor((board_size - (board_size / scale_)) / 2);
+	int drawn_view_side_len = std::ceil(board_size / scale_);
 
-	int drawn_view_side_len = std::ceil(static_cast<float>(board_->getSize()) / scale_);
-
+	int row_offset{}, col_offset{};
 	if (scale_ > 1) {
-		row_offset = std::clamp(row_offset - panning_vector_.y(), 0, board_->getSize() - drawn_view_side_len);
-		col_offset = std::clamp(col_offset - panning_vector_.x(), 0, board_->getSize() - drawn_view_side_len);
+		row_offset = std::clamp(scale_offset - panning_offset_.y(), 0, board_->getSize() - drawn_view_side_len);
+		col_offset = std::clamp(scale_offset - panning_offset_.x(), 0, board_->getSize() - drawn_view_side_len);
 	}
 
 	for (int row = row_offset; row < row_offset + drawn_view_side_len; ++row) {
@@ -72,20 +71,22 @@ void CGOLFrame::wheelEvent(QWheelEvent *event)
 {
 	scale_ *= event->delta() < 0 ? 0.95f : 1.05f;
 	scale_ = std::clamp(scale_, 1.0f, static_cast<float>(board_->getSize()));
+	if (scale_ == 1.0f) panning_offset_ = QPoint();
 	update();
 }
 
 void CGOLFrame::mouseMoveEvent(QMouseEvent *event)
 {
 	if (event->buttons() & Qt::LeftButton) {
-		panning_vector_ = event->pos() - mouse_offset_;
+		panning_offset_ = (event->pos() - drag_start_point_) / 20.0;
 		update();
 	}
 }
 
 void CGOLFrame::mousePressEvent(QMouseEvent *event)
 {
-	mouse_offset_ = event->pos();
+	if (scale_ != 1.0)
+		drag_start_point_ = event->pos();
 }
 
 float CGOLFrame::tileWidth() const
@@ -107,4 +108,10 @@ void CGOLFrame::updateBoard(CGOLBoard board)
 int CGOLFrame::getSpeed() const
 {
 	return game_loop_thread_.getSpeed();
+}
+
+void CGOLFrame::mouseReleaseEvent(QMouseEvent *event)
+{
+	if (event->button() == Qt::LeftButton)
+		drag_start_point_ = QPoint();
 }
