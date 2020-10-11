@@ -1,9 +1,7 @@
 TODO:
- - Game board unit tests
- - Multi threaded
+ - Panning & zoom bug
+ - Zoom into mouse pos
  - Fix outer margin
- - Zoom into mouse pos ?
- - Panning & zoom still buggy
 
 DONE:
  - Game field drawing at variable speed
@@ -17,3 +15,6 @@ DONE:
  - Refactor game logic
  - Variable game field size (slider)
  - GUI Unit tests
+ - Game board unit tests
+ - Game logic unit tests
+ - Multi threaded
