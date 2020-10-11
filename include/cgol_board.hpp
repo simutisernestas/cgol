@@ -21,7 +21,7 @@ public:
 	[[nodiscard]] int getSize() const;
 
 	[[nodiscard]] const byte &getAt(const int &row, const int &col) const;
-	void setAt(const byte &value, const int &row, const int &col);
+	void setAt(const byte &value, const int &row, const int &col); // 0 index based row, col
 
 	void initState(const CGOLBoard::State &s);
 	void initBoard(const int &size, const CGOLBoard::State &s);

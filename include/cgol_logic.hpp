@@ -11,6 +11,9 @@ class CGOLLogic
 {
 
 public:
+	static constexpr byte CELL_ALIVE = byte{1};
+	static constexpr byte CELL_DEAD = byte{0};
+
 	static void runGeneration(std::shared_ptr<CGOLBoard> board);
 
 	static bool isCellAlive(const std::shared_ptr<CGOLBoard> &board, const int &row, const int &col);

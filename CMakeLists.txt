@@ -38,3 +38,7 @@ target_link_libraries(test_gui PRIVATE Qt5::Test ${library_name})
 add_executable(test_board test/test_board.cpp)
 add_test(test_board test_board)
 target_link_libraries(test_board PRIVATE Qt5::Test ${library_name})
+
+add_executable(test_game_logic test/test_game_logic.cpp)
+add_test(test_game_logic test_game_logic)
+target_link_libraries(test_game_logic PRIVATE Qt5::Test ${library_name})
