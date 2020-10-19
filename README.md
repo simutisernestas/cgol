@@ -1,3 +1,7 @@
+### Game window
+
+<img src="https://github.com/simutisernestas/cgol/blob/master/window.gif" />
+
 ### Build & Launch
 ```
 mkdir -p build && cd build
