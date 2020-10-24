@@ -1,3 +1,5 @@
+![CMake](https://github.com/simutisernestas/cgol/workflows/CMake/badge.svg?event=push)
+
 ### Game window
 
 <img src="https://github.com/simutisernestas/cgol/blob/master/window.gif" />
