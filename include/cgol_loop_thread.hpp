@@ -1,6 +1,8 @@
 #ifndef CGOL_LOOP_THREAD_HPP
 #define CGOL_LOOP_THREAD_HPP
 
+#include <memory>
+
 #include <QThread>
 #include <QMutex>
 
